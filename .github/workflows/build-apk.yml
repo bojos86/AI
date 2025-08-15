@@ -18,28 +18,21 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-          cache: gradle
 
       - name: Setup Flutter (stable)
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          cache: true
 
       - name: Flutter doctor
         run: flutter doctor -v
 
-      # مهم: نولّد منصة أندرويد لأن مشروعك ما فيه مجلد android
+      # توليد منصة أندرويد إذا مو موجودة
       - name: Ensure Android platform exists
         run: flutter create . --platforms=android
 
       - name: Fetch packages
         run: flutter pub get
-
-      # اختياري: نتأكد من تزامن gradle wrapper
-      - name: Sync Gradle wrapper
-        working-directory: android
-        run: ./gradlew wrapper
 
       - name: Build debug APK
         run: flutter build apk --debug --split-debug-info=build/symbols
