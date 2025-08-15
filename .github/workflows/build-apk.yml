@@ -1,54 +1,30 @@
-name: Build Flutter APK
+name: Build APK
 
 on:
   push:
-    paths:
-      - "lib/**"
-      - "pubspec.yaml"
-      - ".github/workflows/**"
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-          cache: "gradle"
-
-      - name: Setup Flutter (pin version)
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
-          flutter-version: "3.22.2"   # ثابتة ومتوافقة
-          cache: true
+          flutter-version: '3.19.0'
 
-      - name: Flutter doctor
-        run: flutter doctor -v
+      - name: Install dependencies
+        run: flutter pub get
 
-      - name: Ensure Android platform exists
-        run: flutter create . --platforms=android
+      - name: Build APK
+        run: flutter build apk --release
 
-      - name: Clean & get packages
-        run: |
-          flutter clean
-          flutter pub get
-
-      - name: Analyze (fail fast if Dart errors)
-        run: flutter analyze
-
-      - name: Build debug APK (with stacktrace)
-        run: flutter build apk --debug -v
-
-      - name: Upload debug APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          name: app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
