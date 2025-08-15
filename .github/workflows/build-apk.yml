@@ -1,18 +1,14 @@
 name: Build Flutter APK
 
 on:
-  workflow_dispatch: {}
   push:
     branches: [ main ]
-    paths:
-      - "lib/**"
-      - "assets/**"
-      - "pubspec.yaml"
-      - ".github/workflows/**"
+  workflow_dispatch: {}
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,7 +17,8 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17"
+          java-version: '17'
+          cache: gradle
 
       - name: Setup Flutter (stable)
         uses: subosito/flutter-action@v2
@@ -30,10 +27,19 @@ jobs:
           cache: true
 
       - name: Flutter doctor
-        run: flutter --version
+        run: flutter doctor -v
+
+      # مهم: نولّد منصة أندرويد لأن مشروعك ما فيه مجلد android
+      - name: Ensure Android platform exists
+        run: flutter create . --platforms=android
 
       - name: Fetch packages
         run: flutter pub get
+
+      # اختياري: نتأكد من تزامن gradle wrapper
+      - name: Sync Gradle wrapper
+        working-directory: android
+        run: ./gradlew wrapper
 
       - name: Build debug APK
         run: flutter build apk --debug --split-debug-info=build/symbols
@@ -41,5 +47,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: bbk-ocr-debug-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
