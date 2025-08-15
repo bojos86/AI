@@ -1,0 +1,16 @@
+name: bbk_ocr_flutter
+description: BBK OCR Strict UAT (WebView wrapper)
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_inappwebview: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/bbk_ocr_strict_uat.html
