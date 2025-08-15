@@ -1,5 +1,5 @@
-name: bbk_ocr_app
-description: BBK OCR Demo App
+name: bbk_ocr_uat
+description: BBK OCR UAT
 publish_to: "none"
 version: 1.0.0+1
 
@@ -9,8 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  camera: ^0.10.5+2
-  http: ^1.2.0
+  image_picker: ^1.0.7
+  google_mlkit_text_recognition: ^0.13.0
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
