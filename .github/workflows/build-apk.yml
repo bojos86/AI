@@ -2,13 +2,16 @@ name: Build Flutter APK
 
 on:
   push:
-    branches: [ main ]
+    paths:
+      - "lib/**"
+      - "pubspec.yaml"
+      - "android/**"
+      - ".github/workflows/**"
   workflow_dispatch: {}
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,25 +20,28 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
 
       - name: Setup Flutter (stable)
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
       - name: Flutter doctor
         run: flutter doctor -v
 
-      # توليد منصة أندرويد إذا مو موجودة
-      - name: Ensure Android platform exists
-        run: flutter create . --platforms=android
+      - name: Ensure Android folder exists (create if missing)
+        run: |
+          if [ ! -d "android" ]; then
+            flutter create . --platforms=android
+          fi
 
-      - name: Fetch packages
+      - name: Pub get
         run: flutter pub get
 
       - name: Build debug APK
-        run: flutter build apk --debug --split-debug-info=build/symbols
+        run: flutter build apk --debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
