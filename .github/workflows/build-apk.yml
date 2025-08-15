@@ -1,13 +1,12 @@
 name: Build Flutter APK
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - "lib/**"
       - "pubspec.yaml"
-      - "android/**"
       - ".github/workflows/**"
-  workflow_dispatch: {}
 
 jobs:
   build:
@@ -21,6 +20,7 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+          cache: gradle
 
       - name: Setup Flutter (stable)
         uses: subosito/flutter-action@v2
@@ -28,23 +28,20 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Ensure Android platform exists
+        run: flutter create . --platforms=android
+
       - name: Flutter doctor
         run: flutter doctor -v
 
-      - name: Ensure Android folder exists (create if missing)
-        run: |
-          if [ ! -d "android" ]; then
-            flutter create . --platforms=android
-          fi
-
-      - name: Pub get
+      - name: Fetch packages
         run: flutter pub get
 
       - name: Build debug APK
         run: flutter build apk --debug
 
-      - name: Upload APK
+      - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: bbk-ocr-debug-apk
+          name: bbk-ocr-uat-debug-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
