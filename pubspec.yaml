@@ -1,5 +1,5 @@
 name: bbk_ocr_uat
-description: BBK OCR UAT
+description: Minimal UAT build for BBK OCR
 publish_to: "none"
 
 environment:
@@ -8,13 +8,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.6
-
-  # OCR (على الجهاز)
-  google_mlkit_text_recognition: ^0.13.0
-
-  # اختيار صورة/كاميرا
-  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:
