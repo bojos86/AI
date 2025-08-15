@@ -1,15 +1,13 @@
 name: bbk_ocr_uat
-description: "BBK OCR UAT – paste/parse MT103-like text with strict validations."
+description: BBK OCR UAT app (strict form + MT103 text parser)
 publish_to: "none"
-version: 1.0.0+1
 
 environment:
-  sdk: ">=3.2.0 <4.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.6
 
 dev_dependencies:
   flutter_test:
